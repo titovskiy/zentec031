@@ -3,10 +3,35 @@
     "step": {
       "user": {
         "title": "Подключение Zentec 031",
-        "description": "Введите параметры Modbus TCP",
+        "description": "Укажите базовые параметры подключения",
         "data": {
           "host": "Хост",
           "port": "Порт",
+          "slave_id": "Slave ID",
+          "scan_interval": "Интервал опроса (сек)",
+          "read_only": "Режим только чтения (без записи)",
+          "power_register": "Регистр пуска",
+          "mode_register": "Регистр режима",
+          "mode_heat_value": "Значение режима нагрева",
+          "mode_vent_value": "Значение режима вентиляции",
+          "fan_speed_register": "Регистр скорости вентилятора",
+          "target_temp_register": "Регистр целевой температуры",
+          "supply_temp_register": "Регистр температуры притока",
+          "outdoor_temp_register": "Регистр наружной температуры",
+          "alarm_register": "Регистр аварий",
+          "temperature_divisor": "Делитель температуры",
+          "max_fan_speed": "Максимальная скорость вентилятора",
+          "min_heat_temp_register": "Регистр минимальной температуры подогрева",
+          "max_heat_temp_register": "Регистр максимальной температуры подогрева",
+          "supply_temp_divisor": "Делитель температуры притока",
+          "name": "Название",
+          "advanced_options": "Расширенные настройки (регистры и параметры)"
+        }
+      },
+      "advanced": {
+        "title": "Расширенные настройки",
+        "description": "Настройте карту регистров и дополнительные параметры",
+        "data": {
           "slave_id": "Slave ID",
           "scan_interval": "Интервал опроса (сек)",
           "read_only": "Режим только чтения (без записи)",
