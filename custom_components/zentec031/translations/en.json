@@ -1,0 +1,51 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect Zentec 031",
+        "description": "Enter Modbus TCP connection settings",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "slave_id": "Slave ID",
+          "scan_interval": "Scan interval (seconds)",
+          "power_register": "Power register",
+          "fan_speed_register": "Fan speed register",
+          "target_temp_register": "Target temperature register",
+          "supply_temp_register": "Supply temperature register",
+          "outdoor_temp_register": "Outdoor temperature register",
+          "alarm_register": "Alarm register",
+          "temperature_divisor": "Temperature divisor",
+          "max_fan_speed": "Max fan speed",
+          "read_only": "Read-only mode (disable writes)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to device"
+    },
+    "abort": {
+      "already_configured": "Device already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Advanced settings",
+        "description": "Configure register map and scaling",
+        "data": {
+          "scan_interval": "Scan interval (seconds)",
+          "power_register": "Power register",
+          "fan_speed_register": "Fan speed register",
+          "target_temp_register": "Target temperature register",
+          "supply_temp_register": "Supply temperature register",
+          "outdoor_temp_register": "Outdoor temperature register",
+          "alarm_register": "Alarm register",
+          "temperature_divisor": "Temperature divisor",
+          "max_fan_speed": "Max fan speed",
+          "read_only": "Read-only mode (disable writes)"
+        }
+      }
+    }
+  }
+}

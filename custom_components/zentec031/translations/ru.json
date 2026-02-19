@@ -1,0 +1,51 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Подключение Zentec 031",
+        "description": "Введите параметры Modbus TCP",
+        "data": {
+          "host": "Хост",
+          "port": "Порт",
+          "slave_id": "Slave ID",
+          "scan_interval": "Интервал опроса (сек)",
+          "read_only": "Режим только чтения (без записи)",
+          "power_register": "Регистр пуска",
+          "fan_speed_register": "Регистр скорости вентилятора",
+          "target_temp_register": "Регистр целевой температуры",
+          "supply_temp_register": "Регистр температуры притока",
+          "outdoor_temp_register": "Регистр наружной температуры",
+          "alarm_register": "Регистр аварий",
+          "temperature_divisor": "Делитель температуры",
+          "max_fan_speed": "Максимальная скорость вентилятора"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Не удалось подключиться к устройству"
+    },
+    "abort": {
+      "already_configured": "Устройство уже настроено"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Расширенные настройки",
+        "description": "Настройте карту регистров и масштабирование",
+        "data": {
+          "scan_interval": "Интервал опроса (сек)",
+          "power_register": "Регистр пуска",
+          "fan_speed_register": "Регистр скорости вентилятора",
+          "target_temp_register": "Регистр целевой температуры",
+          "supply_temp_register": "Регистр температуры притока",
+          "outdoor_temp_register": "Регистр наружной температуры",
+          "alarm_register": "Регистр аварий",
+          "temperature_divisor": "Делитель температуры",
+          "max_fan_speed": "Максимальная скорость вентилятора",
+          "read_only": "Режим только чтения (без записи)"
+        }
+      }
+    }
+  }
+}
