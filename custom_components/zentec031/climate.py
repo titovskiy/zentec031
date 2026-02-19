@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Any
-
 from homeassistant.components.climate import ClimateEntity
 from homeassistant.components.climate.const import (
     HVACAction,
@@ -41,7 +39,7 @@ class ZentecClimate(ZentecEntity, ClimateEntity):
     _attr_name = "Climate"
     _attr_supported_features = (
         ClimateEntityFeature.TARGET_TEMPERATURE
-        | ClimateEntityFeature.PRESET_MODE
+        | ClimateEntityFeature.FAN_MODE
     )
     _attr_hvac_modes = [HVACMode.OFF, HVACMode.HEAT, HVACMode.FAN_ONLY]
     _attr_temperature_unit = UnitOfTemperature.CELSIUS
@@ -58,7 +56,7 @@ class ZentecClimate(ZentecEntity, ClimateEntity):
             entry.options.get(CONF_MODE_VENT_VALUE, entry.data.get(CONF_MODE_VENT_VALUE, DEFAULT_MODE_VENT_VALUE))
         )
         self._max_speed = int(entry.options.get(CONF_MAX_FAN_SPEED, entry.data.get(CONF_MAX_FAN_SPEED, DEFAULT_MAX_FAN_SPEED)))
-        self._attr_preset_modes = [str(speed) for speed in range(1, self._max_speed + 1)]
+        self._attr_fan_modes = [str(speed) for speed in range(1, self._max_speed + 1)]
 
     @property
     def unique_id(self) -> str:
@@ -73,7 +71,7 @@ class ZentecClimate(ZentecEntity, ClimateEntity):
         return self.coordinator.data.target_temp if self.coordinator.data else None
 
     @property
-    def preset_mode(self) -> str | None:
+    def fan_mode(self) -> str | None:
         if not self.coordinator.data:
             return None
         speed = self.coordinator.data.fan_speed
@@ -115,9 +113,9 @@ class ZentecClimate(ZentecEntity, ClimateEntity):
         if temperature is not None:
             await self.coordinator.async_set_target_temp(float(temperature))
 
-    async def async_set_preset_mode(self, preset_mode: str) -> None:
+    async def async_set_fan_mode(self, fan_mode: str) -> None:
         try:
-            speed = int(preset_mode)
+            speed = int(fan_mode)
         except ValueError:
             return
         speed = max(1, min(speed, self._max_speed))
