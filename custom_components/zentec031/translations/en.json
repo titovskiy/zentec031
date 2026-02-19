@@ -10,6 +10,9 @@
           "slave_id": "Slave ID",
           "scan_interval": "Scan interval (seconds)",
           "power_register": "Power register",
+          "mode_register": "Mode register",
+          "mode_heat_value": "Heat mode value",
+          "mode_vent_value": "Vent mode value",
           "fan_speed_register": "Fan speed register",
           "target_temp_register": "Target temperature register",
           "supply_temp_register": "Supply temperature register",
@@ -17,7 +20,10 @@
           "alarm_register": "Alarm register",
           "temperature_divisor": "Temperature divisor",
           "max_fan_speed": "Max fan speed",
-          "read_only": "Read-only mode (disable writes)"
+          "read_only": "Read-only mode (disable writes)",
+          "min_heat_temp_register": "Min heat temp register",
+          "max_heat_temp_register": "Max heat temp register",
+          "supply_temp_divisor": "Supply temperature divisor"
         }
       }
     },
@@ -36,6 +42,9 @@
         "data": {
           "scan_interval": "Scan interval (seconds)",
           "power_register": "Power register",
+          "mode_register": "Mode register",
+          "mode_heat_value": "Heat mode value",
+          "mode_vent_value": "Vent mode value",
           "fan_speed_register": "Fan speed register",
           "target_temp_register": "Target temperature register",
           "supply_temp_register": "Supply temperature register",
@@ -43,7 +52,10 @@
           "alarm_register": "Alarm register",
           "temperature_divisor": "Temperature divisor",
           "max_fan_speed": "Max fan speed",
-          "read_only": "Read-only mode (disable writes)"
+          "read_only": "Read-only mode (disable writes)",
+          "min_heat_temp_register": "Min heat temp register",
+          "max_heat_temp_register": "Max heat temp register",
+          "supply_temp_divisor": "Supply temperature divisor"
         }
       }
     }

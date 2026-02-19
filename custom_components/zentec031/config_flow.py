@@ -14,24 +14,36 @@ from homeassistant.core import callback
 from .const import (
     CONF_ALARM_REGISTER,
     CONF_FAN_SPEED_REGISTER,
+    CONF_MAX_HEAT_TEMP_REGISTER,
     CONF_MAX_FAN_SPEED,
+    CONF_MIN_HEAT_TEMP_REGISTER,
+    CONF_MODE_HEAT_VALUE,
+    CONF_MODE_REGISTER,
+    CONF_MODE_VENT_VALUE,
     CONF_OUTDOOR_TEMP_REGISTER,
     CONF_POWER_REGISTER,
     CONF_READ_ONLY,
     CONF_SCAN_INTERVAL,
     CONF_SLAVE_ID,
+    CONF_SUPPLY_TEMP_DIVISOR,
     CONF_SUPPLY_TEMP_REGISTER,
     CONF_TARGET_TEMP_REGISTER,
     CONF_TEMPERATURE_DIVISOR,
     DEFAULT_ALARM_REGISTER,
     DEFAULT_FAN_SPEED_REGISTER,
+    DEFAULT_MAX_HEAT_TEMP_REGISTER,
     DEFAULT_MAX_FAN_SPEED,
+    DEFAULT_MIN_HEAT_TEMP_REGISTER,
+    DEFAULT_MODE_HEAT_VALUE,
+    DEFAULT_MODE_REGISTER,
+    DEFAULT_MODE_VENT_VALUE,
     DEFAULT_OUTDOOR_TEMP_REGISTER,
     DEFAULT_PORT,
     DEFAULT_POWER_REGISTER,
     DEFAULT_READ_ONLY,
     DEFAULT_SCAN_INTERVAL,
     DEFAULT_SLAVE_ID,
+    DEFAULT_SUPPLY_TEMP_DIVISOR,
     DEFAULT_SUPPLY_TEMP_REGISTER,
     DEFAULT_TARGET_TEMP_REGISTER,
     DEFAULT_TEMPERATURE_DIVISOR,
@@ -66,9 +78,18 @@ class ZentecConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 {
                     vol.Required(CONF_HOST): str,
                     vol.Required(CONF_PORT, default=DEFAULT_PORT): vol.All(vol.Coerce(int), vol.Range(min=1, max=65535)),
-                    vol.Required(CONF_SLAVE_ID, default=DEFAULT_SLAVE_ID): vol.All(vol.Coerce(int), vol.Range(min=1, max=247)),
+                    vol.Required(CONF_SLAVE_ID, default=DEFAULT_SLAVE_ID): vol.All(vol.Coerce(int), vol.Range(min=0, max=247)),
                     vol.Required(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): vol.All(vol.Coerce(int), vol.Range(min=5, max=3600)),
                     vol.Required(CONF_POWER_REGISTER, default=DEFAULT_POWER_REGISTER): vol.All(
+                        vol.Coerce(int), vol.Range(min=0, max=65535)
+                    ),
+                    vol.Required(CONF_MODE_REGISTER, default=DEFAULT_MODE_REGISTER): vol.All(
+                        vol.Coerce(int), vol.Range(min=0, max=65535)
+                    ),
+                    vol.Required(CONF_MODE_HEAT_VALUE, default=DEFAULT_MODE_HEAT_VALUE): vol.All(
+                        vol.Coerce(int), vol.Range(min=0, max=65535)
+                    ),
+                    vol.Required(CONF_MODE_VENT_VALUE, default=DEFAULT_MODE_VENT_VALUE): vol.All(
                         vol.Coerce(int), vol.Range(min=0, max=65535)
                     ),
                     vol.Required(CONF_FAN_SPEED_REGISTER, default=DEFAULT_FAN_SPEED_REGISTER): vol.All(
@@ -77,8 +98,17 @@ class ZentecConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     vol.Required(CONF_TARGET_TEMP_REGISTER, default=DEFAULT_TARGET_TEMP_REGISTER): vol.All(
                         vol.Coerce(int), vol.Range(min=0, max=65535)
                     ),
+                    vol.Required(CONF_MIN_HEAT_TEMP_REGISTER, default=DEFAULT_MIN_HEAT_TEMP_REGISTER): vol.All(
+                        vol.Coerce(int), vol.Range(min=0, max=65535)
+                    ),
+                    vol.Required(CONF_MAX_HEAT_TEMP_REGISTER, default=DEFAULT_MAX_HEAT_TEMP_REGISTER): vol.All(
+                        vol.Coerce(int), vol.Range(min=0, max=65535)
+                    ),
                     vol.Required(CONF_SUPPLY_TEMP_REGISTER, default=DEFAULT_SUPPLY_TEMP_REGISTER): vol.All(
                         vol.Coerce(int), vol.Range(min=0, max=65535)
+                    ),
+                    vol.Required(CONF_SUPPLY_TEMP_DIVISOR, default=DEFAULT_SUPPLY_TEMP_DIVISOR): vol.All(
+                        vol.Coerce(int), vol.Range(min=1, max=1000)
                     ),
                     vol.Required(CONF_OUTDOOR_TEMP_REGISTER, default=DEFAULT_OUTDOOR_TEMP_REGISTER): vol.All(
                         vol.Coerce(int), vol.Range(min=0, max=65535)
@@ -130,6 +160,18 @@ class ZentecOptionsFlow(config_entries.OptionsFlow):
                         default=int(options.get(CONF_POWER_REGISTER, data.get(CONF_POWER_REGISTER, DEFAULT_POWER_REGISTER))),
                     ): vol.All(vol.Coerce(int), vol.Range(min=0, max=65535)),
                     vol.Required(
+                        CONF_MODE_REGISTER,
+                        default=int(options.get(CONF_MODE_REGISTER, data.get(CONF_MODE_REGISTER, DEFAULT_MODE_REGISTER))),
+                    ): vol.All(vol.Coerce(int), vol.Range(min=0, max=65535)),
+                    vol.Required(
+                        CONF_MODE_HEAT_VALUE,
+                        default=int(options.get(CONF_MODE_HEAT_VALUE, data.get(CONF_MODE_HEAT_VALUE, DEFAULT_MODE_HEAT_VALUE))),
+                    ): vol.All(vol.Coerce(int), vol.Range(min=0, max=65535)),
+                    vol.Required(
+                        CONF_MODE_VENT_VALUE,
+                        default=int(options.get(CONF_MODE_VENT_VALUE, data.get(CONF_MODE_VENT_VALUE, DEFAULT_MODE_VENT_VALUE))),
+                    ): vol.All(vol.Coerce(int), vol.Range(min=0, max=65535)),
+                    vol.Required(
                         CONF_FAN_SPEED_REGISTER,
                         default=int(
                             options.get(CONF_FAN_SPEED_REGISTER, data.get(CONF_FAN_SPEED_REGISTER, DEFAULT_FAN_SPEED_REGISTER))
@@ -144,6 +186,24 @@ class ZentecOptionsFlow(config_entries.OptionsFlow):
                         ),
                     ): vol.All(vol.Coerce(int), vol.Range(min=0, max=65535)),
                     vol.Required(
+                        CONF_MIN_HEAT_TEMP_REGISTER,
+                        default=int(
+                            options.get(
+                                CONF_MIN_HEAT_TEMP_REGISTER,
+                                data.get(CONF_MIN_HEAT_TEMP_REGISTER, DEFAULT_MIN_HEAT_TEMP_REGISTER),
+                            )
+                        ),
+                    ): vol.All(vol.Coerce(int), vol.Range(min=0, max=65535)),
+                    vol.Required(
+                        CONF_MAX_HEAT_TEMP_REGISTER,
+                        default=int(
+                            options.get(
+                                CONF_MAX_HEAT_TEMP_REGISTER,
+                                data.get(CONF_MAX_HEAT_TEMP_REGISTER, DEFAULT_MAX_HEAT_TEMP_REGISTER),
+                            )
+                        ),
+                    ): vol.All(vol.Coerce(int), vol.Range(min=0, max=65535)),
+                    vol.Required(
                         CONF_SUPPLY_TEMP_REGISTER,
                         default=int(
                             options.get(
@@ -151,6 +211,15 @@ class ZentecOptionsFlow(config_entries.OptionsFlow):
                             )
                         ),
                     ): vol.All(vol.Coerce(int), vol.Range(min=0, max=65535)),
+                    vol.Required(
+                        CONF_SUPPLY_TEMP_DIVISOR,
+                        default=int(
+                            options.get(
+                                CONF_SUPPLY_TEMP_DIVISOR,
+                                data.get(CONF_SUPPLY_TEMP_DIVISOR, DEFAULT_SUPPLY_TEMP_DIVISOR),
+                            )
+                        ),
+                    ): vol.All(vol.Coerce(int), vol.Range(min=1, max=1000)),
                     vol.Required(
                         CONF_OUTDOOR_TEMP_REGISTER,
                         default=int(
